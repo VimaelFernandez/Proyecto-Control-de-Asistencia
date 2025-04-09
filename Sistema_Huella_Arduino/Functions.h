@@ -8,22 +8,21 @@
 
 void showValuesFromEEPROM();
 
-void showConfiguration(String mDnsStr, String &ssid, String &password, int &onTimeConfigured, int &offTimeConfigured);
+void showConfiguration(String mDnsStr, String &ssid, String &password);
 
-void showModeSchedule(String apiTime);
+// void showModeSchedule(String apiTime);
 
-void ShowModeManual(bool stateLamp);
+// void ShowModeManual(bool stateLamp);
 
-void ShowModeTelematic(String body);
+// void ShowModeTelematic(String body);
 
-void showModeSensorMove(bool &loadState);
+// void showModeSensorMove(bool &loadState);
 
 String readStringFromEEPROM(int addr);
 
-int readIntFromEEPROM(int address);
+// int readIntFromEEPROM(int address);
 
-void readDataEEPROM(String &mDnsStr, String &ssid, String &password,
-                    int &onTimeConfigured, int &offTimeConfigured);
+void readDataEEPROM(String &mDnsStr, String &ssid, String &password);
 
 void writeStringToEEPROM(String str);
 

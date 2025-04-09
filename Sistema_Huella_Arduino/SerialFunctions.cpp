@@ -12,7 +12,7 @@ void showValuesFromEEPROM() {
 }
 
 // Muestra la configuración del microcontrolador
-void showConfiguration(String mDnsStr, String &ssid, String &password, int &onTimeConfigured, int &offTimeConfigured) {
+void showConfiguration(String mDnsStr, String &ssid, String &password) {
   Serial.println("");
   Serial.println("mDns almacenado: " + mDnsStr);
   Serial.println("SSID almacenado: " + ssid);
