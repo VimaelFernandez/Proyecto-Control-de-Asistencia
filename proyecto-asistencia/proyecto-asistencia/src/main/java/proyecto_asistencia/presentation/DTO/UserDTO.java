@@ -10,5 +10,6 @@ public class UserDTO {
     private String name;
     private String lastName;
     private String area;
-    private String code;
+    private String role;
+//    private String code;
 }

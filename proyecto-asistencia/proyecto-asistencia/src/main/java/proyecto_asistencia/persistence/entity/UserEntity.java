@@ -12,12 +12,12 @@ import lombok.*;
 public class UserEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
     @Column(name = "last_name")
     private String lastName;
     private String area;
-    private String code;
+    private String role;
+//    private String code;
 }
