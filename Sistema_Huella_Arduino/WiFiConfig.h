@@ -101,12 +101,6 @@ h2 {
     align-items: center;
 }
 
-/* form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-} */
 small {
     color: green;
     display: flex;
@@ -115,7 +109,6 @@ small {
     align-items: center;
 }
 button {
-    margin-top: 1rem;
     margin-bottom: 1rem;
     padding: 0.5rem;
     border-radius: 1.5rem;
@@ -129,11 +122,11 @@ button {
 <body class="color-body">
     <div class="contenedor-principal">
         <div class="contenedor-secundario">
-            <h2>ESP8266 Config</h2>
+            <h2>Assistance Control</h2>
             <form class="form" id="wifiForm">
                 <h3>Device Name</h3>
-                <input id="device" type="text" placeholder="Device" class="input" name='device-name'>
-                <h3>WiFi & IP</h3>
+                <input id="device" type="text" placeholder="Device" class="input" name='device-name'>            
+                <h3>WiFi Credentials</h3>
                 <input id="ssid" type="text" placeholder="SSID" class="input" name='ssid'>
                 <input id="password" type="password" placeholder="Password" class="input" name='password'>
             </form>
@@ -150,7 +143,7 @@ button {
             const ssid = document.getElementById("ssid").value;
             const password = document.getElementById("password").value;
             const deviceName = document.getElementById("device").value;
-            
+
             fetch("/save", {
                 method: "POST",
                 headers:{
@@ -163,7 +156,9 @@ button {
                 document.getElementById("responseMessage").textContent = data;
             })
             .catch(error => {
-                document.getElementById("responseMessage").textContent = "Error: " + error;
+                const responseError = document.getElementById ("responseMessage");
+                responseError.style.color = 'red';
+                responseError.textContent = "Error: " + error;
             });
         });
     </script>

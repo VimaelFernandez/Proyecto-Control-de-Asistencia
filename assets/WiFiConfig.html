@@ -77,7 +77,6 @@ h2 {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
 }
 
 
@@ -112,7 +111,6 @@ small {
     align-items: center;
 }
 button {
-    margin-top: 1rem;
     margin-bottom: 1rem;
     padding: 0.5rem;
     border-radius: 1.5rem;
@@ -126,11 +124,12 @@ button {
 <body class="color-body">
     <div class="contenedor-principal">
         <div class="contenedor-secundario">
-            <h2>ESP8266 Config</h2>
+            <h2>Assistance Control
+            </h2>
             <form class="form" id="wifiForm">
                 <h3>Device Name</h3>
                 <input id="device" type="text" placeholder="Device" class="input" name='device-name'>
-                <h3>WiFi & IP</h3>
+                <h3>WiFi Credentials </h3>
                 <input id="ssid" type="text" placeholder="SSID" class="input" name='ssid'>
                 <input id="password" type="password" placeholder="Password" class="input" name='password'>
             </form>
@@ -148,24 +147,21 @@ button {
             const password = document.getElementById("password").value;
             const deviceName = document.getElementById("device").value;
 
-            const onHourTime = document.getElementById("horasinicio").value;
-            const onMinutesTime = document.getElementById ("minutosinicio").value;
-            const offHourTime = document.getElementById ("horasapagado").value;
-            const offMinutesTime = document.getElementById("minutosapagado").value;
-
             fetch("/save", {
                 method: "POST",
                 headers:{
                     "Content-Type": "application/x-www-form-urlencoded"
                 },
-                body: `ssid=${encodeURIComponent(ssid)}&password=${encodeURIComponent(password)}&devicename=${encodeURIComponent(deviceName)}&onhourtime=${encodeURIComponent(onHourTime)}&onminutestime=${encodeURIComponent(onMinutesTime)}&offhourtime=${encodeURIComponent(offHourTime)}&offminutestime=${encodeURIComponent(offMinutesTime)}`
+                body: `ssid=${encodeURIComponent(ssid)}&password=${encodeURIComponent(password)}&devicename=${encodeURIComponent(deviceName)}`
             })
             .then(response => response.text())
             .then(data => {
                 document.getElementById("responseMessage").textContent = data;
             })
             .catch(error => {
-                document.getElementById("responseMessage").textContent = "Error: " + error;
+                const responseError = document.getElementById ("responseMessage");
+                responseError.style.color = 'red';
+                responseError.textContent = "Error: " + error;
             });
         });
     </script>
