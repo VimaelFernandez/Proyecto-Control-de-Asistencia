@@ -3,24 +3,24 @@ package proyecto_asistencia.persistence.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
 @Builder
-@Table(name = "user")
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserEntity {
-
+@Table(name = "job_role")
+public class JobRoleEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
-
-    @Column(name = "last_name")
-    private String lastName;
-//    private String code;
+    @JoinColumn(name = "job_role")
+    private String jobRole;
 
     @ManyToOne()
     @JoinColumn(name = "id_department", nullable = false)
-    private DepEntity depFromUser;
+    private DepEntity depFromJobRole;
 }

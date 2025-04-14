@@ -5,11 +5,12 @@ import lombok.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDTO {
+public class DepDTO {
+
     private Long id;
-    private String name;
-    private String lastName;
     private String department;
-    private String jobRole;
-//    private String code;
+
+    public DepDTO (GlobalDTO globalDTO){
+        this.department = (String) globalDTO.getData().get("department");
+    }
 }

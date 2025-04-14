@@ -71,12 +71,21 @@ function showUserCreateBox() {
 }
 
 function userCreate() {
-    const data = {
+
+    const data = [{
+        type: "user",
         name: document.getElementById("fname").value,
         lastName: document.getElementById("lname").value,
-        area: document.getElementById("area").value,
+    },
+    {
+        type: "area",
+        area: document.getElementById("area").value
+    },
+    {
+        type: "role",
         role: document.getElementById("role").value
     }
+    ]
 
     // Realizamos la solicitud POST
     fetch(`http://192.168.0.100:8080/user/create`, {
