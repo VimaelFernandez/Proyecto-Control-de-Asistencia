@@ -20,7 +20,7 @@ public class UserEntity {
     private String lastName;
 //    private String code;
 
-    @ManyToOne()
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_department", nullable = false)
     private DepEntity depFromUser;
 }

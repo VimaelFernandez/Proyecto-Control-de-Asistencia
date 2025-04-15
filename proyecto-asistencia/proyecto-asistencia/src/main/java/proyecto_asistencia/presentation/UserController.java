@@ -44,27 +44,28 @@ public class UserController {
 
     //Find All
     @GetMapping("/findAll")
-    ResponseEntity <List<UserDTO>> findByAll(){
-        List<UserDTO> depDTOList = userService.findAll();
+    ResponseEntity <List<UserCompleteDTO>> findByAll(){
+        List<UserCompleteDTO> depDTOList = userService.findAllUsersWithCompleteInfo();
 
         if (depDTOList.isEmpty()){
             return ResponseEntity.noContent().build();
         }
         else {
-            return new ResponseEntity<>(userService.findAll(), HttpStatus.OK);
+            return new ResponseEntity<>(userService.findAllUsersWithCompleteInfo(), HttpStatus.OK);
         }
     }
 
 
     //Find User by id
     @GetMapping("/find/{id}")
-    ResponseEntity<UserDTO> findById(@PathVariable Long id) {
+    ResponseEntity<UserCompleteDTO> findById(@PathVariable Long id) {
         return new ResponseEntity<>(userService.findByIdUser(id), HttpStatus.OK);
     }
 
     //Delete User by id
     @DeleteMapping("/delete/{id}")
     ResponseEntity<String> deleteById(@PathVariable Long id) {
+        System.out.println("Identificador recibido: "+ id);
         return new ResponseEntity<>(userService.deleteByUser(id), HttpStatus.OK);
     }
 

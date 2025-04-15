@@ -20,9 +20,9 @@ public class DepEntity {
     private Long id;
     private String department;
 
-    @OneToMany (mappedBy = "depFromUser", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany (mappedBy = "depFromUser", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     List<UserEntity> userEntityList;
 
-    @OneToMany (mappedBy = "depFromJobRole", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany (mappedBy = "depFromJobRole", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     List<JobRoleEntity> jobRoleEntityList;
 }

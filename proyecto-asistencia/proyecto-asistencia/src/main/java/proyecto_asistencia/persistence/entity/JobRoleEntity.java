@@ -20,7 +20,7 @@ public class JobRoleEntity {
     @JoinColumn(name = "job_role")
     private String jobRole;
 
-    @ManyToOne()
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_department", nullable = false)
     private DepEntity depFromJobRole;
 }

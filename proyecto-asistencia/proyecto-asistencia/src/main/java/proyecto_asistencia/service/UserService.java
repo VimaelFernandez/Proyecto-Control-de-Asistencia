@@ -16,7 +16,6 @@ import proyecto_asistencia.presentation.DTO.*;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -37,101 +36,103 @@ public class UserService {
 
     public List<Object> saveData(List<Object> listDTO) {
         DepDTO department = new DepDTO();
-        JobRoleEntity jobRoleEntity = new JobRoleEntity();
-        UserEntity userEntity = new UserEntity();
+        UserDTO1 userDTO = new UserDTO1();
+        JobRoleDTO jobRoleDTO = new JobRoleDTO();
         for (Object objectDto : listDTO) {
             if (objectDto instanceof UserDTO1) {
-                userEntity = modelMapper.map(objectDto, UserEntity.class);
+                userDTO = modelMapper.map(objectDto, UserDTO1.class);
             } else if (objectDto instanceof DepDTO) {
-                department =(DepDTO) objectDto;
+                department = (DepDTO) objectDto;
             } else if (objectDto instanceof JobRoleDTO) {
-                jobRoleEntity.setJobRole(((JobRoleDTO) objectDto).getJobRole());
+                jobRoleDTO = ((JobRoleDTO) objectDto);
             } else {
                 throw new IllegalArgumentException("Object is not existent");
             }
         }
-        Optional <DepEntity> depEntityOptional = depRepository.findByDepartment(department.getDepartment());
 
+        Optional<DepEntity> depEntityOptional = depRepository.findByDepartment(department.getDepartment());
         if (department.getDepartment() == null || department.getDepartment().isEmpty()) {
             throw new IllegalArgumentException("El departamento está vacío");
         } else {
-            if (depEntityOptional.isPresent()){
+            if (depEntityOptional.isPresent()) {
                 System.out.println("El departamento ya existe.");
-            }
-            else{
-                DepEntity depEntity = new DepEntity();
-                depEntity.setDepartment(department.getDepartment());
+            } else {
+                DepEntity depEntity = modelMapper.map(department, DepEntity.class);
                 depRepository.save(depEntity);
                 depEntityOptional = depRepository.findByDepartment(department.getDepartment());
             }
         }
 
-        if (jobRoleEntity.getJobRole() == null || jobRoleEntity.getJobRole().isEmpty()) {
+        if (jobRoleDTO.getJobRole() == null || jobRoleDTO.getJobRole().isEmpty()) {
             throw new IllegalArgumentException("El cargo está vacío");
         } else {
-            Optional<JobRoleEntity> jobRoleEntityOptional = jobRoleRepository.findByJobRole(jobRoleEntity.getJobRole());
+            Optional<JobRoleEntity> jobRoleEntityOptional = jobRoleRepository.findByJobRole(jobRoleDTO.getJobRole());
             if (jobRoleEntityOptional.isPresent()) {
                 System.out.println("El cargo ya existe");
             } else {
-                jobRoleEntity.setDepFromJobRole(depEntityOptional.get());
+                JobRoleEntity jobRoleEntity = modelMapper.map(jobRoleDTO, JobRoleEntity.class);
+                if (depEntityOptional.isPresent()) {
+                    jobRoleEntity.setDepFromJobRole(depEntityOptional.get());
+                } else {
+                    throw new IllegalArgumentException("Department is not found");
+                }
                 jobRoleRepository.save(jobRoleEntity);
             }
         }
 
-        if (userEntity.getName() == null || userEntity.getName().isEmpty()) {
+        if (userDTO.getName() == null || userDTO.getName().isEmpty()) {
             throw new IllegalArgumentException("El usuario está vacío");
         } else {
-            Optional<UserEntity> userOptional = userRepository.findByName(userEntity.getName());
-            if (userOptional.isPresent()) {
-                throw new IllegalArgumentException("El usuario ya existe");
-            } else {
-                userEntity.setId(userRepository.encontrarMaximoId() + 1);
+            UserEntity userEntity = modelMapper.map(userDTO, UserEntity.class);
+            userEntity.setId(userRepository.encontrarMaximoId() + 1);
+            if (depEntityOptional.isPresent()) {
                 userEntity.setDepFromUser(depEntityOptional.get());
-                userRepository.save(userEntity);
+            } else {
+                throw new IllegalArgumentException("Department not found");
             }
+            userRepository.save(userEntity);
         }
         return listDTO;
     }
 
-    @Transactional
-    public List<UserDTO> findAll() {
-        List<UserEntity> userEntities = userRepository.findAll();
-
-        return IntStream.range(0, userEntities.size())
-                .mapToObj(index -> {
-                    UserEntity userEntity = userEntities.get(index);
-                    UserDTO userDTO = modelMapper.map(userEntity, UserDTO.class);
-
-                    if (userEntity.getDepFromUser() != null) {
-                        userDTO.setDepartment(userEntity.getDepFromUser().getDepartment());
-
-                        // Manejo seguro del rol por índice
-                        List<JobRoleEntity> roles = userEntity.getDepFromUser().getJobRoleEntityList();
-                        String jobRole = (roles != null && index < roles.size())
-                                ? roles.get(index).getJobRole()
-                                : "Rol no definido"; // Valor por defecto
-                        userDTO.setJobRole(jobRole);
-                    }
-
-                    return userDTO;
-                })
+    @Transactional(readOnly = true)
+    public List<UserCompleteDTO> findAllUsersWithCompleteInfo() {
+        return userRepository.findAllUsersWithDepartmentAndJobRole().stream()
+                .map(this::mapToCompleteDTO)
                 .collect(Collectors.toList());
     }
 
-    public UserDTO findByIdUser(Long id) {
+    private UserCompleteDTO mapToCompleteDTO(UserEntity user) {
+        UserCompleteDTO dto = modelMapper.map(user, UserCompleteDTO.class);
+        if (user.getDepFromUser() != null) {
+            dto.setDepartment(user.getDepFromUser().getDepartment());
+
+            // Tomamos el primer job role (asumiendo 1:1)
+            if (!user.getDepFromUser().getJobRoleEntityList().isEmpty()) {
+                dto.setJobRole(user.getDepFromUser().getJobRoleEntityList().get(0).getJobRole());
+            }
+        }
+        return dto;
+    }
+
+    public UserCompleteDTO findByIdUser(Long id) {
         Optional<UserEntity> userEntity = userRepository.findById(id);
         if (userEntity.isPresent()) {
             UserEntity currentUserEntity = userEntity.get();
-            return modelMapper.map(currentUserEntity, UserDTO.class);
+            return modelMapper.map(currentUserEntity, UserCompleteDTO.class);
         } else {
             throw new ExecutionException("No existe en la base de datos");
         }
     }
 
+    @Transactional
     public String deleteByUser(Long id) {
         Optional<UserEntity> userEntity = userRepository.findById(id);
         if (userEntity.isPresent()) {
-            UserEntity currentUserEntity = userEntity.get();
+            DepEntity department = userEntity.get().getDepFromUser();
+            if (department != null) {
+                department.getUserEntityList().remove(userRepository.findById(id).get());
+            }
             userRepository.deleteById(id);
             return "El usuario con id: " + id + " se ha borrado con exito";
         } else {

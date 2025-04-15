@@ -5,7 +5,7 @@ import lombok.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDTO {
+public class UserCompleteDTO {
     private Long id;
     private String name;
     private String lastName;
