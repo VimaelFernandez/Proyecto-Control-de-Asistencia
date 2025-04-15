@@ -21,6 +21,9 @@ public class UserEntity {
 //    private String code;
 
     @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_department", nullable = false)
-    private DepEntity depFromUser;
+    @JoinColumn(name = "department_id", nullable = false)
+    private DepEntity userDepartment;
+
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    private Assistance assistance;
 }

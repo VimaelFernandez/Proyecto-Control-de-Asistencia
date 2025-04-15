@@ -12,12 +12,14 @@ import proyecto_asistencia.persistence.entity.UserEntity;
 import proyecto_asistencia.persistence.repositories.IDepRepository;
 import proyecto_asistencia.persistence.repositories.IJobRoleRepository;
 import proyecto_asistencia.persistence.repositories.UserRepository;
-import proyecto_asistencia.presentation.DTO.*;
+import proyecto_asistencia.presentation.DTO.department.DepDTO;
+import proyecto_asistencia.presentation.DTO.jobrole.JobRoleDTO;
+import proyecto_asistencia.presentation.DTO.user.UserCompleteDTO;
+import proyecto_asistencia.presentation.DTO.user.UserDTO1;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 @Data
 @Service
@@ -34,7 +36,7 @@ public class UserService {
 
     private final ModelMapper modelMapper = new ModelMapper();
 
-    public List<Object> saveData(List<Object> listDTO) {
+    public List<Object> saveUserInfo(List<Object> listDTO) {
         DepDTO department = new DepDTO();
         UserDTO1 userDTO = new UserDTO1();
         JobRoleDTO jobRoleDTO = new JobRoleDTO();
@@ -72,7 +74,7 @@ public class UserService {
             } else {
                 JobRoleEntity jobRoleEntity = modelMapper.map(jobRoleDTO, JobRoleEntity.class);
                 if (depEntityOptional.isPresent()) {
-                    jobRoleEntity.setDepFromJobRole(depEntityOptional.get());
+                    jobRoleEntity.setJobRoleDepartment(depEntityOptional.get());
                 } else {
                     throw new IllegalArgumentException("Department is not found");
                 }
@@ -86,7 +88,7 @@ public class UserService {
             UserEntity userEntity = modelMapper.map(userDTO, UserEntity.class);
             userEntity.setId(userRepository.encontrarMaximoId() + 1);
             if (depEntityOptional.isPresent()) {
-                userEntity.setDepFromUser(depEntityOptional.get());
+                userEntity.setUserDepartment(depEntityOptional.get());
             } else {
                 throw new IllegalArgumentException("Department not found");
             }
@@ -104,12 +106,12 @@ public class UserService {
 
     private UserCompleteDTO mapToCompleteDTO(UserEntity user) {
         UserCompleteDTO dto = modelMapper.map(user, UserCompleteDTO.class);
-        if (user.getDepFromUser() != null) {
-            dto.setDepartment(user.getDepFromUser().getDepartment());
+        if (user.getUserDepartment() != null) {
+            dto.setDepartment(user.getUserDepartment().getDepartment());
 
             // Tomamos el primer job role (asumiendo 1:1)
-            if (!user.getDepFromUser().getJobRoleEntityList().isEmpty()) {
-                dto.setJobRole(user.getDepFromUser().getJobRoleEntityList().get(0).getJobRole());
+            if (!user.getUserDepartment().getJobRoleList().isEmpty()) {
+                dto.setJobRole(user.getUserDepartment().getJobRoleList().get(0).getJobRole());
             }
         }
         return dto;
@@ -129,9 +131,9 @@ public class UserService {
     public String deleteByUser(Long id) {
         Optional<UserEntity> userEntity = userRepository.findById(id);
         if (userEntity.isPresent()) {
-            DepEntity department = userEntity.get().getDepFromUser();
+            DepEntity department = userEntity.get().getUserDepartment();
             if (department != null) {
-                department.getUserEntityList().remove(userRepository.findById(id).get());
+                department.getUserList().remove(userRepository.findById(id).get());
             }
             userRepository.deleteById(id);
             return "El usuario con id: " + id + " se ha borrado con exito";

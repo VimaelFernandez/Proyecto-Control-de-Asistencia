@@ -17,9 +17,10 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     Long encontrarMaximoId();
 
     @Query("SELECT u FROM UserEntity u " +
-            "LEFT JOIN FETCH u.depFromUser d " +
-            "LEFT JOIN FETCH d.jobRoleEntityList j " +
-            "WHERE j IS NOT NULL")//findAllUsersWithCompleteInfo
+            "LEFT JOIN FETCH u.userDepartment d " +
+            "LEFT JOIN FETCH d.jobRoleList j " +
+            "WHERE j IS NOT NULL " +
+            "ORDER BY u.id ASC ")
     List<UserEntity> findAllUsersWithDepartmentAndJobRole();
 
     Optional<UserEntity> findByName(String name);

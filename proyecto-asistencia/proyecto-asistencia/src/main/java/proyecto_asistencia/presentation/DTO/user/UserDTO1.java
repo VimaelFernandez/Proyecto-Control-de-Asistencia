@@ -1,10 +1,9 @@
-package proyecto_asistencia.presentation.DTO;
+package proyecto_asistencia.presentation.DTO.user;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import proyecto_asistencia.persistence.entity.UserEntity;
+import proyecto_asistencia.presentation.DTO.GlobalDTO;
 
 @Data
 @AllArgsConstructor

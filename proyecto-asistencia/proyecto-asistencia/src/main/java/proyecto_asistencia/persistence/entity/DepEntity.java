@@ -3,7 +3,6 @@ package proyecto_asistencia.persistence.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -20,9 +19,9 @@ public class DepEntity {
     private Long id;
     private String department;
 
-    @OneToMany (mappedBy = "depFromUser", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
-    List<UserEntity> userEntityList;
+    @OneToMany (mappedBy = "userDepartment", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    List<UserEntity> userList;
 
-    @OneToMany (mappedBy = "depFromJobRole", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
-    List<JobRoleEntity> jobRoleEntityList;
+    @OneToMany (mappedBy = "jobRoleDepartment", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    List<JobRoleEntity> jobRoleList;
 }

@@ -1,4 +1,4 @@
-package proyecto_asistencia.presentation.DTO;
+package proyecto_asistencia.presentation.DTO.user;
 
 import lombok.*;
 

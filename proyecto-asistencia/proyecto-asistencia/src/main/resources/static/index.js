@@ -4,7 +4,6 @@ function loadTable(dataUsers) {
     var trHTML = '';
     for (const dataUser of dataUsers) {
         trHTML += '<tr>';
-        trHTML += '<td>' + dataUser.id + '</td>';
         trHTML += '<td>' + dataUser.name + '</td>';
         trHTML += '<td>' + dataUser.lastName + '</td>';
         trHTML += '<td>' + dataUser.department + '</td>';
@@ -56,7 +55,6 @@ function showUserCreateBox() {
     Swal.fire({
         title: 'Create user',
         html: `
-    <input id="id" name="userId" type="hidden">
     <input id="fname" name="NameUser" class="swal2-input" placeholder="First">
     <input id="lname"  name="LastNameUser" class="swal2-input" placeholder="Last">
     <input id="area" name="Area" class="swal2-input" placeholder="Area">

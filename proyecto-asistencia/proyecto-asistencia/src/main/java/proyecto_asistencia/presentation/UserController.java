@@ -1,10 +1,13 @@
 package proyecto_asistencia.presentation;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import proyecto_asistencia.presentation.DTO.*;
+import proyecto_asistencia.presentation.DTO.factories.DepFactoryDTO;
+import proyecto_asistencia.presentation.DTO.factories.JobRoleFactoryDTO;
+import proyecto_asistencia.presentation.DTO.factories.UserFactoryDTO;
+import proyecto_asistencia.presentation.DTO.user.UserCompleteDTO;
 import proyecto_asistencia.presentation.DTO.interfaces.GlobalFactoryDTO;
 import proyecto_asistencia.service.UserService;
 
@@ -39,10 +42,10 @@ public class UserController {
 
             listDTOs.add(dto);
         }
-        return new ResponseEntity<>(userService.saveData(listDTOs), HttpStatus.OK);
+        return new ResponseEntity<>(userService.saveUserInfo(listDTOs), HttpStatus.OK);
     }
 
-    //Find All
+    //Find a UserComplete List
     @GetMapping("/findAll")
     ResponseEntity <List<UserCompleteDTO>> findByAll(){
         List<UserCompleteDTO> depDTOList = userService.findAllUsersWithCompleteInfo();

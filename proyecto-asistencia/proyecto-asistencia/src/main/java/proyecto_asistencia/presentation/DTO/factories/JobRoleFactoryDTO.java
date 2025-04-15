@@ -1,5 +1,7 @@
-package proyecto_asistencia.presentation.DTO;
+package proyecto_asistencia.presentation.DTO.factories;
 
+import proyecto_asistencia.presentation.DTO.GlobalDTO;
+import proyecto_asistencia.presentation.DTO.jobrole.JobRoleDTO;
 import proyecto_asistencia.presentation.DTO.interfaces.GlobalFactoryDTO;
 
 public class JobRoleFactoryDTO implements GlobalFactoryDTO {

@@ -1,6 +1,7 @@
-package proyecto_asistencia.presentation.DTO;
+package proyecto_asistencia.presentation.DTO.department;
 
 import lombok.*;
+import proyecto_asistencia.presentation.DTO.GlobalDTO;
 
 @Data
 @AllArgsConstructor
