@@ -11,6 +11,7 @@ import proyecto_asistencia.presentation.DTO.user.UserCompleteDTO;
 import proyecto_asistencia.presentation.DTO.interfaces.GlobalFactoryDTO;
 import proyecto_asistencia.service.UserService;
 
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -58,7 +59,6 @@ public class UserController {
         }
     }
 
-
     //Find User by id
     @GetMapping("/find/{id}")
     ResponseEntity<UserCompleteDTO> findById(@PathVariable Long id) {
@@ -71,6 +71,4 @@ public class UserController {
         System.out.println("Identificador recibido: "+ id);
         return new ResponseEntity<>(userService.deleteByUser(id), HttpStatus.OK);
     }
-
-
 }

@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Table(name = "assistance")
-public class Assistance {
+public class AssistanceEntity {
 
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
@@ -28,7 +28,7 @@ public class Assistance {
     @Column(name="departure_time")
     private LocalDateTime departureTime;
 
-    @OneToMany(mappedBy = "assistance", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
-    @JoinColumn(name = "usuario_id")
-    private List<UserEntity> user;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn (name = "user_id", nullable = false)
+    private UserEntity user;
 }

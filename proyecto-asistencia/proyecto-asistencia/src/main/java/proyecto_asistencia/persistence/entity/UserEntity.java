@@ -3,6 +3,8 @@ package proyecto_asistencia.persistence.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -24,6 +26,6 @@ public class UserEntity {
     @JoinColumn(name = "department_id", nullable = false)
     private DepEntity userDepartment;
 
-    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
-    private Assistance assistance;
+    @OneToMany (fetch = FetchType.LAZY, mappedBy = "user")
+    private List<AssistanceEntity> assistance;
 }
